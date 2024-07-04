@@ -1,0 +1,47 @@
+version: "3"
+services:
+
+  guard-api:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    restart: always
+    ports:
+      - 6006:5005
+    command: gunicorn --bind 0.0.0.0:5005 --workers=1 main:app --log-level=debug -c conf/gunicorn.py --timeout 0
+
+  node_guard_service_node1:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    restart: always
+    command: celery --app worker worker -Q guard-evident-1-queue -l INFO -c 4
+
+  node_guard_service_node2:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    restart: always
+    command: celery --app worker worker -Q guard-evident-2-queue -l INFO -c 4
+    
+  node_guard_service_node3:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    restart: always
+    command: celery --app worker worker -Q guard-evident-3-queue -l INFO -c 4
+
+  node_guard_service_node4:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    restart: always
+    command: celery --app worker worker -Q guard-evident-4-queue -l INFO -c 4
+  
+  node_guard_service_node5:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    restart: always
+    command: celery --app worker worker -Q guard-evident-5-queue -l INFO -c 4
+    
